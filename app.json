@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "CUlinary",
+    "slug": "culinary-cornell",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.culinary.cornell"
+    },
+    "android": {
+      "package": "com.culinary.cornell"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
+}
