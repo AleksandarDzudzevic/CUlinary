@@ -1,20 +1,33 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthStack } from './navigation/AuthStack';
+import { MainStack } from './navigation/MainStack';
+import { LoadingScreen } from './components/LoadingScreen';
+
+const AppContent: React.FC = () => {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return (
+    <NavigationContainer>
+      {session ? <MainStack /> : <AuthStack />}
+    </NavigationContainer>
+  );
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <StatusBar style="auto" />
+        <AppContent />
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
