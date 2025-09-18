@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { RecommendationService } from '../services/recommendations';
+// Removed old ML recommendation import - now using AI recommendations
 import { CornellDiningService } from '../services/cornellDining';
 import { Recommendation } from '../types/database';
 
@@ -61,10 +62,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       console.log(`📅 Selected date: ${selectedDate || 'All days'}`);
       console.log(`🍽️ Selected meal: ${selectedMealType || 'All meals'}`);
       
-      // Generate recommendations with proper filtering
-      const recs = await RecommendationService.generateRecommendations(user.id, selectedMealType, selectedDate);
-      console.log(`📊 Generated ${recs.length} recommendations`);
-      setRecommendations(recs);
+      // Clear old recommendations - now using AI recommendations in separate screen
+      console.log('✅ Data loaded - use AI Recommendations tab for personalized suggestions');
+      setRecommendations([]);
     } catch (error: any) {
       console.error('❌ Error loading recommendations:', error);
       Alert.alert('Error', `Failed to load recommendations: ${error.message}`);
@@ -112,7 +112,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       eateryName: recommendation.eatery_name,
       mealType: recommendation.meal_type,
       menuDate: recommendation.menu_date || selectedDate || new Date().toISOString().split('T')[0],
-      items: recommendation.recommended_items,
+      items: recommendation.top_items,
       campusArea: recommendation.campus_area || 'Campus Area',
       location: recommendation.location || 'Location',
       operatingHours: recommendation.operating_hours || {
@@ -122,11 +122,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     });
   };
 
-  const renderRecommendation = (recommendation: Recommendation, index: number) => (
+  const renderRecommendation = (recommendation: Recommendation, index: number): any => {
+    // Disabled - using AI recommendations instead
+    return null;
+  };
+
+  /* const oldRenderRecommendation = () => (
     <TouchableOpacity 
-      key={`${recommendation.eatery_id}-${index}`} 
+      key="disabled" 
       style={styles.recommendationCard}
-      onPress={() => handleCardPress(recommendation)}
+      onPress={() => {}}
       activeOpacity={0.7}
     >
       <View style={styles.recommendationHeader}>
@@ -162,7 +167,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <Text style={styles.tapToView}>Tap to view full menu →</Text>
       </View>
     </TouchableOpacity>
-  );
+  ); */
 
   return (
     <ScrollView
@@ -287,25 +292,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <View style={styles.loadingContainer}>
             <Text style={styles.loadingText}>Loading recommendations...</Text>
           </View>
-        ) : recommendations.length === 0 ? (
+        ) : (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No recommendations available</Text>
+            <Text style={styles.emptyText}>🤖 Try AI Recommendations!</Text>
             <Text style={styles.emptySubtext}>
-              Try refreshing or check your preferences
+              Get personalized meal suggestions based on your preferences
             </Text>
             <TouchableOpacity
               style={styles.preferencesButton}
-              onPress={() => navigation.navigate('Preferences')}
+              onPress={() => navigation.navigate('MLRecommendations' as never)}
             >
-              <Text style={styles.preferencesButtonText}>Edit Preferences</Text>
+              <Text style={styles.preferencesButtonText}>Get AI Recommendations</Text>
             </TouchableOpacity>
           </View>
-        ) : (
+        )}
+        {false && (
           <View style={styles.recommendationsContainer}>
             <Text style={styles.recommendationsTitle}>
               Top Recommendations {selectedMealType && `for ${selectedMealType}`}
             </Text>
-            {recommendations.map((rec, index) => renderRecommendation(rec, index))}
+            {/* Old recommendation rendering disabled - using AI recommendations */}
           </View>
         )}
       </View>

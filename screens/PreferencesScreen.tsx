@@ -216,16 +216,7 @@ export const PreferencesScreen: React.FC<PreferencesScreenProps> = ({ navigation
           }))
         )}
 
-        {/* Preferred Cuisines */}
-        {renderToggleSection(
-          'Preferred Cuisines',
-          CUISINES,
-          preferences.preferred_cuisines,
-          (item) => setPreferences(prev => ({
-            ...prev,
-            preferred_cuisines: toggleArrayItem(prev.preferred_cuisines, item)
-          }))
-        )}
+
 
         <TouchableOpacity
           style={[styles.saveButton, loading && styles.saveButtonDisabled]}

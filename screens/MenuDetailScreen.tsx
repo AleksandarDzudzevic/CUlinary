@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { MenuItem } from '../types/database';
 
-export const MenuDetailScreen = ({ navigation, route }: any) => {
+const MenuDetailScreen = ({ navigation, route }: any) => {
   const { eateryName, mealType, menuDate, items, campusArea, location, operatingHours } = route.params;
 
   // Group items by category
@@ -86,7 +86,7 @@ export const MenuDetailScreen = ({ navigation, route }: any) => {
             <Text style={styles.campusArea}>{campusArea}</Text>
             {location && <Text style={styles.location}>{location}</Text>}
             <Text style={styles.hours}>
-              {operatingHours.start} - {operatingHours.end}
+              🕒 {operatingHours}
             </Text>
           </View>
         </View>
@@ -250,3 +250,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default MenuDetailScreen;

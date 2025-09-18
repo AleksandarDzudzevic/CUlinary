@@ -4,8 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from '../screens/HomeScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
-import { PreferencesScreen } from '../screens/PreferencesScreen';
-import { MenuDetailScreen } from '../screens/MenuDetailScreen';
+import { SimplePreferencesScreen } from '../screens/SimplePreferencesScreen';
+import SimpleMLScreen from '../screens/SimpleMLScreen';
+import MenuDetailScreen from '../screens/MenuDetailScreen';
+import MenuBrowserScreen from '../screens/MenuBrowserScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -19,8 +21,43 @@ const HomeStack = () => (
     />
     <Stack.Screen 
       name="Preferences" 
-      component={PreferencesScreen}
-      options={{ title: 'Preferences' }}
+      component={SimplePreferencesScreen}
+      options={{ title: 'Basic Preferences' }}
+    />
+    <Stack.Screen 
+      name="MLPreferences" 
+      component={SimpleMLScreen}
+      options={{ title: 'ML Recommendations' }}
+    />
+    <Stack.Screen 
+      name="MenuDetail" 
+      component={MenuDetailScreen}
+      options={{ title: 'Menu Details', headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const MLRecommendationsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="MLPreferencesMain" 
+      component={SimpleMLScreen}
+      options={{ title: 'AI Recommendations' }}
+    />
+    <Stack.Screen 
+      name="MenuDetail" 
+      component={MenuDetailScreen}
+      options={{ title: 'Menu Details', headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const MenuBrowserStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="MenuBrowserMain" 
+      component={MenuBrowserScreen}
+      options={{ title: 'All Menus' }}
     />
     <Stack.Screen 
       name="MenuDetail" 
@@ -39,8 +76,18 @@ const ProfileStack = () => (
     />
     <Stack.Screen 
       name="Preferences" 
-      component={PreferencesScreen}
-      options={{ title: 'Edit Preferences' }}
+      component={SimplePreferencesScreen}
+      options={{ title: 'Edit Basic Preferences' }}
+    />
+    <Stack.Screen 
+      name="MLPreferences" 
+      component={SimpleMLScreen}
+      options={{ title: 'ML Recommendations' }}
+    />
+    <Stack.Screen 
+      name="MenuDetail" 
+      component={MenuDetailScreen}
+      options={{ title: 'Menu Details', headerShown: false }}
     />
   </Stack.Navigator>
 );
@@ -60,13 +107,22 @@ export const MainStack: React.FC = () => {
       }}
     >
       <Tab.Screen 
-        name="Home" 
-        component={HomeStack}
+        name="MenuBrowser" 
+        component={MenuBrowserStack}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'All Menus',
           tabBarIcon: ({ color, size }) => (
-            // Using a simple text icon for lightweight approach
-            <Text style={{ color, fontSize: size - 4, fontWeight: 'bold' }}>🏠</Text>
+            <Text style={{ color, fontSize: size - 4, fontWeight: 'bold' }}>📋</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="MLRecommendations" 
+        component={MLRecommendationsStack}
+        options={{
+          tabBarLabel: 'Recommendations',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size - 4, fontWeight: 'bold' }}>🍽️</Text>
           ),
         }}
       />
@@ -76,7 +132,6 @@ export const MainStack: React.FC = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            // Using a simple text icon for lightweight approach
             <Text style={{ color, fontSize: size - 4, fontWeight: 'bold' }}>👤</Text>
           ),
         }}
