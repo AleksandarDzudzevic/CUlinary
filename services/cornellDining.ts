@@ -63,6 +63,9 @@ export class CornellDiningService {
 
   static async fetchAndStoreMenus(): Promise<void> {
     try {
+      // Clean up old menu data first
+      await DatabaseManager.cleanupOldMenus();
+      
       // Initialize database maintenance (cleanup old data)
       await DatabaseManager.initializeMaintenance();
       
@@ -200,6 +203,27 @@ export class CornellDiningService {
       return data || [];
     } catch (error) {
       console.error('Error getting today\'s menus:', error);
+      return [];
+    }
+  }
+
+  static async getStoredMenus(): Promise<any[]> {
+    try {
+      const { data, error } = await supabase
+        .from('menus')
+        .select('*')
+        .order('menu_date', { ascending: true })
+        .order('meal_type', { ascending: true })
+        .order('eatery_name', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching stored menus from database:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error('Error getting stored menus:', error);
       return [];
     }
   }

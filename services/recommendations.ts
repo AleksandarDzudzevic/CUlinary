@@ -29,19 +29,23 @@ export class RecommendationService {
   static async saveUserPreferences(userId: string, preferences: UserPreferences): Promise<boolean> {
     try {
       console.log('💾 Saving user preferences...', preferences);
-      const { error } = await supabase
-        .from('user_preferences')
-        .upsert({
-          user_id: userId,
-          dietary_restrictions: preferences.dietary_restrictions,
-          favorite_dining_halls: preferences.favorite_dining_halls,
-          preferred_cuisines: preferences.preferred_cuisines,
-          campus_location: preferences.campus_location,
-          updated_at: new Date().toISOString(),
-        }, { 
-          onConflict: 'user_id',
-          ignoreDuplicates: false 
-        });
+        const { error } = await supabase
+          .from('user_preferences')
+          .upsert({
+            user_id: userId,
+            dietary_restrictions: preferences.dietary_restrictions,
+            favorite_dining_halls: preferences.favorite_dining_halls,
+            preferred_cuisines: preferences.preferred_cuisines,
+            campus_location: preferences.campus_location,
+            food_preferences: preferences.food_preferences,
+            nutritional_preferences: preferences.nutritional_preferences,
+            cuisine_preferences: preferences.cuisine_preferences,
+            meal_preferences: preferences.meal_preferences,
+            updated_at: new Date().toISOString(),
+          }, { 
+            onConflict: 'user_id',
+            ignoreDuplicates: false 
+          });
 
       if (error) {
         console.error('❌ Error saving preferences:', error);
@@ -126,24 +130,21 @@ export class RecommendationService {
           if (filteredItems.length > 0) {
             recommendations.push({
               eatery_name: menu.eatery_name,
-              eatery_id: menu.eatery_id,
-              recommended_items: menu.items, // All items for detail view
-              top_items: filteredItems.slice(0, 5), // Top 5 for card preview
-              score: score,
-              distance_score: this.calculateDistanceScore(menu, preferences.campus_location),
-              preference_score: this.calculatePreferenceScore(filteredItems, preferences),
               meal_type: menu.meal_type,
               menu_date: menu.menu_date,
-              campus_area: menu.campus_area,
-              location: menu.location,
-              operating_hours: menu.operating_hours,
+              location: menu.location || '',
+              campus_area: menu.campus_area || '',
+              operating_hours: menu.operating_hours || {},
+              menu_summary: menu.menu_summary || '',
+              match_percentage: Math.round(score),
+              top_items: filteredItems.slice(0, 5),
             });
           }
         }
       }
 
       // Sort by total score (higher is better)
-      return recommendations.sort((a, b) => b.score - a.score);
+      return recommendations.sort((a, b) => b.match_percentage - a.match_percentage);
     } catch (error) {
       console.error('Error generating recommendations:', error);
       return [];
@@ -184,7 +185,7 @@ export class RecommendationService {
     // Fallback to name-based mapping for older data
     const eateryName = menu.eatery_name;
     const locationMap: { [key: string]: string[] } = {
-      'North Campus': ['Robert Purcell', 'North Star', 'RPCC'],
+      'North Campus': ['Robert Purcell', 'North Star', 'RPCC', 'Morrison'],
       'Central Campus': ['Okenshields', 'Mattin', 'Ivy Room', 'Trillium', 'Kennedy'],
       'West Campus': ['Becker', 'Cook', 'Keeton', 'Rose', 'Flora Rose', '104West'],
       'Collegetown': ['Collegetown', 'CTB'],

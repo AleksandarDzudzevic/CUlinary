@@ -118,7 +118,6 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
 
               {renderPreferenceSection('Dietary Restrictions', preferences.dietary_restrictions)}
               {renderPreferenceSection('Favorite Dining Halls', preferences.favorite_dining_halls)}
-              {renderPreferenceSection('Preferred Cuisines', preferences.preferred_cuisines)}
             </>
           ) : (
             <View style={styles.noPreferencesContainer}>

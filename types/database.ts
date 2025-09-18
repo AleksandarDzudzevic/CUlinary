@@ -9,6 +9,10 @@ export interface Database {
           favorite_dining_halls: string[];
           preferred_cuisines: string[];
           campus_location: string;
+          food_preferences?: any;
+          nutritional_preferences?: any;
+          cuisine_preferences?: any;
+          meal_preferences?: any;
           created_at: string;
           updated_at: string;
         };
@@ -19,6 +23,10 @@ export interface Database {
           favorite_dining_halls: string[];
           preferred_cuisines: string[];
           campus_location: string;
+          food_preferences?: any;
+          nutritional_preferences?: any;
+          cuisine_preferences?: any;
+          meal_preferences?: any;
           created_at?: string;
           updated_at?: string;
         };
@@ -29,6 +37,10 @@ export interface Database {
           favorite_dining_halls?: string[];
           preferred_cuisines?: string[];
           campus_location?: string;
+          food_preferences?: any;
+          nutritional_preferences?: any;
+          cuisine_preferences?: any;
+          meal_preferences?: any;
           created_at?: string;
           updated_at?: string;
         };
@@ -110,28 +122,49 @@ export interface MenuItem {
 }
 
 export interface UserPreferences {
+  // Legacy preferences (keep for backward compatibility)
   dietary_restrictions: string[];
   favorite_dining_halls: string[];
   preferred_cuisines: string[];
   campus_location: string;
+  
+  // Food type preferences (based on Cornell food data)
+  food_preferences?: {
+    seafood?: number;
+    poultry?: number;
+    beef_pork?: number;
+    vegetarian?: number;
+  };
+
+  // Enhanced ML-based preferences (-1 to 1 scale, 0 = neutral)
+  nutritional_preferences?: {
+    protein_rich?: number;
+    healthy_option?: number;
+    fried_food?: number;
+  };
+
+  cuisine_preferences?: {
+    american?: number;
+    italian?: number;
+    asian?: number;
+    mexican?: number;
+    indian?: number;
+  };
+
+  meal_preferences?: {
+    comfort_food?: number;
+    breakfast_food?: number;
+  };
 }
 
 export interface Recommendation {
   eatery_name: string;
-  eatery_id: string;
-  recommended_items: MenuItem[]; // All items for detail view
-  top_items?: MenuItem[]; // Top recommended items for card preview
-  score: number;
-  distance_score: number;
-  preference_score: number;
   meal_type: string;
-  menu_date?: string;
-  campus_area?: string;
-  location?: string;
-  operating_hours?: {
-    start: string;
-    end: string;
-    startTimestamp: number;
-    endTimestamp: number;
-  };
+  menu_date: string;
+  location: string;
+  campus_area: string;
+  operating_hours: any;
+  menu_summary: string;
+  match_percentage: number;
+  top_items: MenuItem[];
 }
