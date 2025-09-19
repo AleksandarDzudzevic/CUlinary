@@ -13,7 +13,7 @@ expo-env.d.ts
 *.sql
 
 # Documentation files  
-*.md
+
 
 # Package files (but keep package.json and package-lock.json)
 # *.json  # Commented out - we need package.json
